@@ -1,0 +1,11 @@
+IMPORT:
+    org.bukkit.event.server.TabCompleteEvent
+    java.util.ArrayList
+
+on TabCompleteEvent:
+    set {_Buffer} to event.getBuffer()
+    set {_ArrayList} to new ArrayList()
+    if event.getSender() is op:
+        stop trigger
+    if {_Buffer} is "/":
+        event.setCompletions({_ArrayList})

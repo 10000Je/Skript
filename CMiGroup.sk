@@ -1,0 +1,26 @@
+IMPORT:
+    com.Zrips.CMI.Modules.ChatFormat.ChatFormatManager
+    com.Zrips.CMI.Modules.ChatFormat.CMIChatRoom
+    com.Zrips.CMI.Containers.CMIUser
+    com.Zrips.CMI.CMI
+    java.util.Map
+    java.util.ArrayList
+
+command /cmitest:
+    trigger:
+        set {_CMI} to CMI.getInstance()
+        set {_ChatFormatManager} to new ChatFormatManager({_CMI})
+        set {_ChatRooms} to {_ChatFormatManager}.getChatRooms()
+        set {_Collections} to {_ChatRooms}.values()
+        set {_ArrayList} to new ArrayList({_Collections})
+        set {_size} to {_ArrayList}.size()
+        loop {_size} times:
+            set {_num} to loop-number
+            subtract 1 from {_num}
+            set {_name} to {_ArrayList}.get({_num}).getChatName()
+            message {_name} to player
+
+command /야옹:
+    trigger:
+        set {_CMI} to new CMIUser(player)
+        message "%{_CMI}.getChatRoom().getChatName()%" to player

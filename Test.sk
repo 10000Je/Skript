@@ -1,0 +1,24 @@
+IMPORT:
+	com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI
+	com.Zrips.CMI.Modules.Economy.Economy
+	java.util.ArrayList
+
+command /팀챗:
+	trigger:
+		set {_true} to SuperiorSkyblockAPI.getPlayer("%player%").hasTeamChatEnabled()
+		message "%{_true}%" to player
+
+command /돈:
+	trigger:
+		set {_money} to Economy.getBalance("%player%")
+		message "%{_money}%" to player
+		
+command /섬원:
+	trigger:
+		set {_team} to SuperiorSkyblockAPI.getPlayer("%player%").getIsland().getIslandMembers(true)
+		set {_size} to {_team}.size()
+		loop {_size} times:
+			set {_index} to loop-number
+			set {_p} to {_team}.get({_index}-1).getName()
+			message "%{_p}%" to player
+		

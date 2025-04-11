@@ -1,0 +1,30 @@
+IMPORT:
+    com.HK.Shop.Event.ShopBuyEvent
+    com.HK.Shop.Event.ShopSellEvent
+    com.HK.Shop.ShopManager
+
+on ShopBuyEvent:
+    set {_item} to event.getItem()
+    message "%{_item}%" to event.getPlayer()
+
+on ShopSellEvent:
+    set {_item} to event.getItem()
+    message "%{_item}%" to event.getPlayer()
+
+on right click:
+    if "%event-block%" does not contain "inactive" and "stone button":
+        stop trigger
+    set {_loc} to the location at 207.5, 68.5, 114.5 of the world "world"
+    if event-block's location is {_loc}:
+        Location_SetPlaying({_loc}, "We Wish You A Merry ChristMas")
+        loop all players:
+            Location_addPlayer(loop-player)
+
+on right click:
+    if "%event-block%" does not contain "inactive" and "stone button":
+        stop trigger
+    set {_loc} to the location at 208.5, 68.5, 114.5 of the world "world"
+    if event-block's location is {_loc}:
+        Location_StopPlaying()
+        loop all players:
+            Location_removePlayer(loop-player)

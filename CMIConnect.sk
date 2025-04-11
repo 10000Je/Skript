@@ -1,0 +1,18 @@
+IMPORT:
+	com.Zrips.CMI.Containers.CMIUser
+	com.Zrips.CMI.events.CMIPlayerUnVanishEvent
+	org.bukkit.World
+	org.bukkit.entity.Player
+
+command /사라짐:
+	trigger:
+		set {_CMI} to new CMIUser(player)
+		set {_Vanished} to {_CMI}.isVanished()
+		set {_Money} to {_CMI}.getBalance()
+		message "%{_Vanished}% %{_Money}%" to player
+
+
+command /번개:
+	trigger:
+		set {_w} to player.getWorld()
+		{_w}.strikeLightningEffect(player.getLocation())

@@ -1,0 +1,91 @@
+IMPORT:
+    com.xxmicloxx.NoteBlockAPI.RadioSongPlayer
+    com.xxmicloxx.NoteBlockAPI.NBSDecoder
+    java.io.File
+	java.util.ArrayList
+
+command /노래 [<string>] [<string>]:
+	trigger:
+		if arg 1 is not set:
+			song_list(player,1)
+			stop trigger
+		if arg 1 is "목록":
+			if arg 2 is not set:
+				song_list(player,1)
+				stop trigger
+			else:
+				set {_arg2} to arg 2 parsed as integer
+				if {_arg2} is integer:
+					song_list(player,{_arg2})
+					stop trigger
+				else:
+					message "&c정수를 입력해주세요." to player
+					stop trigger
+		if arg 1 is "재생":
+			if {PlayingSongs::%player's uuid%}.isPlaying() is true:
+				{PlayingSongs::%player's uuid%}.removePlayer(Player)
+				{PlayingSongs::%player's uuid%}.setPlaying(false)
+			set {PlayingSongs::%player's uuid%} to new RadioSongPlayer(NBSDecoder.parse(new File("plugins/NoteBlockAPI/%arg 2%.nbs")))
+			{PlayingSongs::%player's uuid%}.addPlayer(Player)
+			{PlayingSongs::%player's uuid%}.setPlaying(true)
+			message "&6노래 &f%arg 2% &6(을)를 재생합니다." to player
+			stop trigger
+		if arg 1 is "중지":
+			if {PlayingSongs::%player's uuid%}.isPlaying() is true:
+				{PlayingSongs::%player's uuid%}.removePlayer(Player)
+				{PlayingSongs::%player's uuid%}.setPlaying(false)
+			stop trigger
+
+function song_list(p: player, page: integer):
+	set {_index} to 0
+	set {_num} to {_page}-1
+	set {_files} to new File("plugins/NoteBlockAPI/").list()
+	set {_songs} to new ArrayList(Arrays.asList({_files}))
+	set {_size} to {_songs}.size()
+	message nl to {_p}
+	message "[ &e놀이터 재생목록! &f(%{_page}% 페이지) &e]" to {_p}
+	message nl to {_p}
+	loop {_size} times:
+		set {_index} to loop-number
+		subtract 1 from {_index}
+		if {_index} is between {_num}*10 and {_page}*10-1:
+			set {_song} to {_songs}.get({_index})
+			replace all ".nbs" with "" in {_song}
+			send formatted "<ttp:&6클릭 시 노래 &f%{_song}% &6(을)를 재생합니다.><cmd:/노래 재생 %{_song}%>&6◆ &b%{_song}%<reset>" to {_p}		
+			add 1 to {_index}
+		else if {_index} > {_page}*10-1:
+			message nl to {_p}
+			if {_page} > 1:
+				send formatted "<ttp:&c클릭 시 이전페이지를 엽니다.><cmd:/노래 목록 %{_page}-1%>&c(이전)<reset> &f/ <ttp:&a클릭 시 다음페이지를 엽니다.><cmd:/노래 목록 %{_page}+1%>&a(다음)<reset> <ttp:&c클릭 시 노래를 중지합니다.><cmd:/노래 중지>&9(중지)<reset>" to {_p}
+				message nl to {_p}
+				stop trigger
+			else if {_page} is 1:
+				send formatted "<ttp:&a클릭 시 다음페이지를 엽니다.><cmd:/노래 목록 %{_page}+1%>&a(다음)<reset> <ttp:&c클릭 시 노래를 중지합니다.><cmd:/노래 중지>&9(중지)<reset>" to {_p}
+				message nl to {_p}
+				stop trigger
+	if {_page} > 1:
+		if {_index} <= {_page}*10-1:
+			message nl to {_p}
+			send formatted "<ttp:&c클릭 시 이전페이지를 엽니다.><cmd:/노래 목록 %{_page}-1%>&c(이전)<reset> <ttp:&c클릭 시 노래를 중지합니다.><cmd:/노래 중지>&9(중지)<reset>" to {_p}
+			message nl to {_p}
+			stop trigger
+	else if {_page} is 1:
+		if {_index} <= {_page}*10:
+			message nl to {_p}
+			send formatted "<ttp:&c클릭 시 노래를 중지합니다.><cmd:/노래 중지>&9(중지)<reset>" to {_p}
+			message nl to {_p}
+			stop trigger
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	

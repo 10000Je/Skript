@@ -1,0 +1,36 @@
+IMPORT:
+    net.coreprotect.CoreProtectAPI
+    java.util.ArrayList
+
+#Made by 민제#2703 (2차수정과 배포를 허락하나, 현재 이 문장을 남긴채 배포해주세요.)
+#보호유지시간은 초단위로 입력합니다. 현재 12주(최소 30일(2,592,000)이상)
+#자동으로 로그가 삭제될경우 블럭보호도 같이 삭제됩니다.
+
+OPTIONS:
+    보호유지시간: 7257600
+    접두사: &6&lH&b&lK&a&lPROTECT&r
+
+on break:
+    set {_CAPI} to new CoreProtectAPI()
+    set {_1stList} to {_CAPI}.blockLookup(event-block, {@보호유지시간})
+    set {_1stSize} to {_1stList}.size()
+    set {_LogPlayer} to ""
+    loop {_1stSize} times:
+        set {_1stNum} to loop-number
+        subtract 1 from {_1stNum}
+        set {_RESULT} to {_CAPI}.parseResult({_1stList}.get({_1stNum}))
+        if {_RESULT}.getActionString() is "Placement":
+            set {_LogPlayer} to {_RESULT}.getPlayer()
+            exit 1 loop
+        else:
+            continue
+    if {_LogPlayer} is "":
+        stop trigger
+    if player is not {_LogPlayer}:
+        message "{@접두사} 이 블록은 %{_LogPlayer}%님의 보호를 받고 있습니다!"
+        cancel event
+
+command /로그삭제:
+    trigger:
+        set {_CAPI} to new CoreProtectAPI()
+        {_CAPI}.performPurge({@보호유지시간})

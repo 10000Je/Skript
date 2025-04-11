@@ -1,0 +1,14 @@
+IMPORT:
+    com.comphenix.protocol.ProtocolLibrary
+    com.comphenix.protocol.ProtocolManager
+    com.comphenix.protocol.events.PacketContainer
+    com.comphenix.protocol.PacketType$Play$Server as PacketTypePlayServer
+    java.lang.Float
+
+command /protocol:
+    trigger:
+        set {_PM} to ProtocolLibrary.getProtocolManager()
+        set {_FE} to {_PM}.createPacket(PacketTypePlayServer.EXPLOSION)
+        {_FE}.getDoubles().write(0, player's x-coord).write(1, player's y-coord).write(2, player's z-coord)
+        {_FE}.getFloat().write(0, Float.parseFloat("3")).write(2, Float.parseFloat("1"))
+        {_PM}.sendServerPacket(player, {_FE})

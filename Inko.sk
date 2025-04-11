@@ -1,0 +1,15 @@
+IMPORT:
+    com.DevHakSaeng.Inko.Inko
+    org.bukkit.inventory.ItemStack
+
+on chat:
+    set {_msg} to uncoloured message
+    set {_Inko} to new Inko()
+    set {_TransLated} to {_Inko}.en2ko({_msg}, true)
+    set message format to "%player's displayname% &7: &f%{_TransLated}%"
+
+on chat:
+    if player's tool is not air:
+        set {_item} to player's tool
+        set {_Meta} to {_item}.getData().toString()
+        message {_Meta} to player
